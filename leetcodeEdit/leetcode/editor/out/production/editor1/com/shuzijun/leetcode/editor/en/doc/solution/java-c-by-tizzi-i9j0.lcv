@@ -1,0 +1,91 @@
+- 我们一行一行的尝试在某个位置放置一个皇后，然后检查这个位置是否能放皇后，若果不能放就直接选择下一个位置，**不让搜索树继续往下发展。** 若该位置能放，才继续往下发展放其他的皇后。
+
+![图片.png](https://pic.leetcode.cn/1666932223-YkNfND-%E5%9B%BE%E7%89%87.png)
+
+- **判断该位置上是否可以放该皇后：**
+  col【】数组记录某列已经放过了皇后。col【i】= 1代表第i列已经放了一个皇后。
+  d【】 数组来记录某正对角线已经放置过了皇后。
+  ud【】数组来记录某反对角线已经放置过了皇后。
+
+- **正对角线：**
+
+![图片.png](https://pic.leetcode.cn/1666931166-tFAKxl-%E5%9B%BE%E7%89%87.png)
+- **反对角线：**
+
+![图片.png](https://pic.leetcode.cn/1667298742-GuVPqi-%E5%9B%BE%E7%89%87.png)
+
+* []
+
+```java
+class Solution {
+    List<List<String>> ans = new ArrayList<>();
+    int[] row;
+    boolean[] cols, d, ud;
+    int N;
+    public List<List<String>> solveNQueens(int n) {
+        N = n;
+        cols = new boolean[n];
+        d = new boolean[25];
+        ud = new boolean[25];
+        row = new int[n]; // 用来保存第几行第几列放置Q
+        dfs(0);
+        return ans;
+    }
+    void dfs(int i) { 
+        if (i == N) {
+            char[] arr = new char[N];
+            Arrays.fill(arr, '.');
+            List<String> g = new ArrayList<>();
+            for (int j = 0; j < N; j++) {
+                arr[row[j]] = 'Q';
+                g.add(new String(arr)); 
+                arr[row[j]] = '.';
+            }
+            ans.add(g);
+            return;
+        }
+        //选择一个位置进行放置
+        for (int j = 0; j < N; j++) {
+            if (!cols[j] && !d[i + j] && !ud[N - i + j]) {
+                //列，对角线、反对角线判断
+                cols[j] = d[i + j] = ud[N - i + j]= true;
+                row[i] = j;
+                dfs(i + 1);
+                cols[j] = d[i + j] = ud[N - i + j]= false;
+            }
+        }
+    }
+}
+```
+
+* []
+
+```cpp
+class Solution {
+public:
+    vector<vector<string>> solveNQueens(int n) {
+        vector<bool> cols(n), d(25), ud(25);
+        vector<vector<string>> ans;
+        vector<string> strs(n, string(n, '.'));
+        dfs(0, strs, cols, d, ud, ans, n);  
+        return ans;
+    }
+    void dfs(int i,  vector<string>& strs, vector<bool>& cols, vector<bool>& d, vector<bool>& ud, vector<vector<string>>& ans, int n) {
+        if (i == n) {
+            ans.push_back(strs);
+            return; 
+        }
+        //选择一个位置进行放置
+        for (int j = 0; j < n; j++) {
+            if (!cols[j] && !d[i + j] && !ud[n - i + j]) {
+                cols[j] = d[i + j] = ud[n - i + j]= true;
+                strs[i][j] = 'Q';
+                dfs(i + 1, strs, cols, d, ud, ans, n);
+                strs[i][j] = '.';
+                cols[j] = d[i + j] = ud[n - i + j]= false;
+            }
+        }
+    }
+};
+```
+

@@ -1,0 +1,51 @@
+> Problem: [23. 合并K个升序链表](https://leetcode.cn/problems/merge-k-sorted-lists/description/)
+
+[TOC]
+
+# 思路
+
+> 最小堆来实现数组排序
+
+# 解题方法
+
+> 由于最后返回的链表中数组是按由小到大排序的, 所以可以拿最小堆先遍历参数中的lists, 再用poll组装返回的链表
+
+# 复杂度
+
+- 时间复杂度:
+
+> 添加时间复杂度, 示例： $O(n)$
+
+- 空间复杂度:
+
+> 添加空间复杂度, 示例： $O(n)$
+
+# Code
+
+* []
+
+```Java
+
+class Solution {
+    public ListNode mergeKLists(ListNode[] lists) {
+        ListNode res = new ListNode();
+        // 最小堆
+        PriorityQueue<Integer> queue = new PriorityQueue<>();
+        for (ListNode list : lists) {
+            while (list != null) {
+                queue.offer(list.val);
+                list = list.next;
+            }
+        }
+        ListNode tem = res;
+        while (!queue.isEmpty()) {
+            ListNode node = new ListNode();
+            node.val = queue.poll();
+            tem.next = node;
+            tem = tem.next;
+        }
+        return res.next;
+    }
+}
+```
+
