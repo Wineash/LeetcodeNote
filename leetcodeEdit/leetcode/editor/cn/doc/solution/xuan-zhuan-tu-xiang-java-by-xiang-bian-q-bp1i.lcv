@@ -1,0 +1,60 @@
+**题目大意:**
+给你一个二维矩阵，请你将该矩阵顺时针旋转九十度
+![image.png](https://pic.leetcode.cn/1676773776-aurqAq-image.png)
+
+**思路分析：**
+常规思路：去想找关于坐标之间的规律，然后进行交换
+但可以思维跳跃一下，去尝试把矩阵进行反转以及镜像对称，反转的意思就是把矩阵翻过来的感觉，镜像对称就是类似于按对角线来进行交换。
+
+**所以，思路如下：**
+1、先将二维矩阵按照左上到右下的对角进行镜像对称
+
+![image.png](https://pic.leetcode.cn/1676774065-GqhErM-image.png)
+
+2、然后再对矩阵进行反转，就是想象矩阵翻过来的样子
+
+![image.png](https://pic.leetcode.cn/1676774085-WKQrtA-image.png)
+
+结果就正好是二维矩阵顺时针翻转九十度的样子
+
+**代码如下：**
+
+class Solution {
+
+    public void rotate(int[][] matrix) {
+            //将二维数组按左上到右下进行反转
+            int n = matrix.length - 1;          //
+            int i,j,array;
+            for(i = 0 ; i <= n; i++){
+                for(j = i; j <= n; j++){
+                    array = matrix[i][j];   //交换
+                    matrix[i][j] = matrix[j][i];
+                    matrix[j][i] = array;
+                }
+            }
+            //利用foreach,调用reverse反转函数将二维数组的每一行进行反转
+            for(int[]row:matrix){
+                reverse(row);
+      '
+      }
+    }
+
+**//定义reverse反转函数**
+
+    public void reverse(int[]arr){
+    
+        //i,j类似于指针，一个刚开始指在数组的开头，一个指在数组的最后面，两个指针都在往中间移动
+        int i = 0;  
+        int j = arr.length - 1;
+        int array;
+        while(j > i){
+            array = arr[i];
+            arr[i] = arr[j];
+            arr[j] = array;
+            i++;
+            j--; 
+        }
+    
+    }
+
+}

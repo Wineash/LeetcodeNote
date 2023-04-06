@@ -1,0 +1,53 @@
+**观察矩阵元素r(i,j),我们发现如下特点:**
+- (1)旋转后r(i,j)会放置在r(j,length-1-i)的位置上
+- (2) 我们对一个元素旋转4次会回到原位
+- (3)外圈和内圈元素的旋转相互独立.
+
+---
+
+**我们可以通过以下方式旋转所有元素:**
+1. 对任意元素matrix[r][l],我们计算出它旋转后的位置matrix[j,length-i-1],将该位置原来的值维护在变量中,接着把matrix[r][l]放入他旋转后的位置,重复四次.
+   ![image.png](https://pic.leetcode.cn/1676468425-BZieHz-image.png)
+2. 一条边重复以上操作
+   ![image.png](https://pic.leetcode.cn/1676468596-Thewhk-image.png)
+3. 对每一个圈的一条边重复以上操作(黑色区域为我们需要操作的元素):
+   ![image.png](https://pic.leetcode.cn/1676468829-vKMlij-image.png)
+
+代码如下:
+
+* 
+
+```
+public void rotate(int[][] matrix) {
+        int len = matrix.length;
+        //计算方阵的圈数
+        int level = (len+1)/2;
+        int curR = 0;
+        int curL = 0;
+        //i表示当前层
+        for(int i=0;i<level;i++){
+            curR = i; 
+            //j表示同一个圈上一条边中的元素
+            for(int j=i;j<(len-i-1);j++){
+                curL=j;
+                int lastVal = matrix[i][j];
+                //对每一个元素重复旋转赋值四次
+                for(int k=0;k<4;k++){
+                    //根据当前位置计算旋转后位置
+                    int nextL = len-1-curR;
+                    int nextR = curL;
+                    
+                    int tmp = matrix[nextR][nextL];
+                    //将值放入旋转后的位置(该位置原来的值已经取出)
+                    matrix[nextR][nextL] = lastVal;
+                    //把旋转后的位置原来的值存在lastVal中
+                    lastVal = tmp;
+                    curL = nextL;
+                    curR=nextR;
+                }
+            }
+        }
+    }
+```
+
+时间复杂度为O(N)空间复杂度为O(N).
